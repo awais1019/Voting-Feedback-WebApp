@@ -1,0 +1,67 @@
+/* @import "tailwindcss";
+@import "./fonts.css";
+
+@theme {
+  --font-primary: "Inter", sans-serif;
+  --font-primary-thin: var(--font-primary);
+  --font-primary-extralight: var(--font-primary);
+  --font-primary-light: var(--font-primary);
+  --font-primary-italic: var(--font-primary);
+  --font-primary-regular: var(--font-primary);
+  --font-primary-medium: var(--font-primary);
+  --font-primary-semibold: var(--font-primary);
+  --font-primary-bold: var(--font-primary);
+  --font-primary-extrabold: var(--font-primary);
+  --font-primary-black: var(--font-primary);
+}
+
+.font-primary-thin {
+  font-family: var(--font-primary);
+  font-weight: 100;
+}
+
+.font-primary-extralight {
+  font-family: var(--font-primary-extralight);
+  font-weight: 200;
+}
+
+.font-primary-light {
+  font-family: var(--font-primary-light);
+  font-weight: 300;
+}
+
+.font-primary-regular {
+  font-family: var(--font-primary-regular);
+  font-weight: 400;
+}
+
+.font-primary-italic {
+  font-family: var(--font-primary-italic);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.font-primary-medium {
+  font-family: var(--font-primary-medium);
+  font-weight: 500;
+}
+
+.font-primary-semibold {
+  font-family: var(--font-primary-semibold);
+  font-weight: 600;
+}
+
+.font-primary-bold {
+  font-family: var(--font-primary);
+  font-weight: 700;
+}
+
+.font-primary-extrabold {
+  font-family: var(--font-primary-extrabold);
+  font-weight: 800;
+}
+
+.font-primary-black {
+  font-family: var(--font-primary-black);
+  font-weight: 900;
+} */

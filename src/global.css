@@ -1,0 +1,32 @@
+@import "tailwindcss";
+@import "./font/fonts.css";
+
+@theme {
+  --font-primary: "Inter", sans-serif;
+  --color-blue:oklch(0.53 0.1482 251.08);
+  --colr-mint:oklch(0.88 0.1793 166.86);
+  --color-danger: oklch(55% 0.25 30);
+  --color-success: oklch(65% 0.18 130);
+  --color-background: oklch(98% 0.01 250);
+  --color-text: oklch(20% 0 0);
+}
+* {
+  @apply m-0 p-0 box-border;
+}
+
+html,body{
+  font-family: var(--font-primary);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+
+  .btn {
+    @apply font-thin text-[50px];
+  } 
+  .btn3{
+    @apply font-black text-[50px];
+  }
+ 
+
+
