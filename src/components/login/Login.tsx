@@ -2,16 +2,38 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type FieldValues } from "react-hook-form";
 import { z } from "zod";
 import { emailSchema, passwordSchema } from "../../zodSchema";
+import { useAuthStore } from "../../stores/useAuthStore";
+import { LoginUser } from "../../services/authService";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
 
-type FormData = z.infer<typeof loginSchema>;
+export type FormData = z.infer<typeof loginSchema>;
+export type User = {
+  uid: string | null;
+  email: string | null;
+  role: string | null;
+};
 export default function Login() {
-  const onSubmit = (data: FieldValues) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const setAuthData = useAuthStore((state) => state.setAuthData);
+  const [error, setError] = useState("");
+  const onSubmit = async (data: FieldValues) => {
+    const result = await LoginUser(data.email, data.password);
+    if (result.success) {
+      const user = result.user;
+      setAuthData(user);
+      if (user.role === "admin") {
+        navigate("/admin-dashboard");
+      }
+    } else {
+      setError(result.message);
+    }
   };
   const {
     register,
@@ -23,15 +45,16 @@ export default function Login() {
       email: "",
       password: "",
     },
-    mode: "onBlur",
   });
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col items-center w-screen h-screen p-[clamp(24px,2vw,36px)] gap-[clamp(12px,2vw,24px)] md:bg-white md:opacity-[90%] md:border-gray-300 md:border justify-center md:w-[clamp(500px,3vw,900px)] md:h-[clamp(400px,2vh,800px)] md:rounded-[6px] font-primary"
+        className="flex flex-col w-screen h-screen p-[clamp(24px,2vw,36px)] gap-[clamp(12px,2vw,24px)] md:bg-white md:opacity-[90%] md:border-gray-300 md:border justify-center md:w-[clamp(500px,3vw,900px)] md:h-[clamp(400px,2vh,800px)] md:rounded-[6px] font-primary"
       >
-        <h1 className="font-bold font-primary text-[24px] text-blue">Login</h1>
+        <h1 className="font-bold font-primary text-[24px] text-blue">
+          Welcome Back
+        </h1>
         <div className="flex flex-col w-full gap-1">
           <label htmlFor="email" className="font-primary font-light">
             Email
@@ -72,6 +95,9 @@ export default function Login() {
           value={"Login"}
           className="w-full bg-blue p-2 rounded-[10px] text-[16px] font-primary font-semibold text-white"
         />
+        {error && (
+          <p className="text-red-800 font-primary font-medium">{error}</p>
+        )}
       </form>
     </div>
   );
