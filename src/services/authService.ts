@@ -1,8 +1,21 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  deleteUser,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth, db } from "../firebaseconfig";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import type { User } from "../components/login/Login";
-import { FirebaseError } from "firebase/app";
+import { getErrorMessage } from "../lib/util";
+import type { FieldValues } from "react-hook-form";
 
 type LoginSuccess = {
   success: true;
@@ -31,7 +44,7 @@ export const LoginUser = async (
     const userData = userDoc.data();
     const user: User = {
       uid,
-      email: userCredential.user.email,
+      email: userData.email,
       role: userData.role,
     };
 
@@ -42,30 +55,35 @@ export const LoginUser = async (
     return { success: false, message: msg };
   }
 };
-function getErrorMessage(error: unknown): string {
-  if (error instanceof Error) {
-    if (error instanceof FirebaseError) {
-     
-      switch (error.code) {
-        case "auth/user-not-found":
-          return "No user found with this email.";
-        case "auth/wrong-password":
-          return "Incorrect password.";
-        case "auth/invalid-email":
-          return "Invalid email address.";
-        case "auth/invalid-credential":
-          return "Invalid credentials.";
-        case "auth/too-many-requests":
-          return "Too many attempts. Try again later.";
-        case "auth/network-request-failed":
-          return "Check your internet connection.";
-        default:
-          return error.message;
-      }
-    } else {
-      return error.message;
+
+export const SignupUser = async (data: FieldValues): Promise<string> => {
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      data.email,
+      data.password
+    );
+    const user = userCredential.user;
+    const usersRef = collection(db, "users");
+    const regQuery = query(usersRef, where("regNumber", "==", data.regNumber));
+    const querySnapshot = await getDocs(regQuery);
+    if (!querySnapshot.empty) {
+      await deleteUser(user);
+      throw new Error("Registration number already in use.");
     }
-  } else {
-    return "An unknown error occurred.";
+    const [sessionStr, department] = data.regNumber.split("-");
+    const session = Number(sessionStr);
+    const docRef = doc(db, "users", user.uid);
+    await setDoc(docRef, {
+      name: data.name,
+      email: data.email,
+      regNumber: data.regNumber,
+      session: session,
+      department: department,
+      role: "student",
+    });
+    return "Account successfully created";
+  } catch (error: unknown) {
+    return getErrorMessage(error);
   }
-}
+};

@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type FieldValues } from "react-hook-form";
 import { z } from "zod";
-import { emailSchema, passwordSchema } from "../../zodSchema";
+import { emailSchema, passwordSchema } from "../../schema";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { LoginUser } from "../../services/authService";
 import { useState } from "react";
@@ -30,6 +30,8 @@ export default function Login() {
       setAuthData(user);
       if (user.role === "admin") {
         navigate("/admin-dashboard");
+      } else {
+        navigate("/student-dashboard");
       }
     } else {
       setError(result.message);
@@ -45,18 +47,22 @@ export default function Login() {
       email: "",
       password: "",
     },
+    mode: "onBlur",
   });
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
+    <div className="w-screen h-screen flex justify-center overflow-y-auto md:items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col w-screen h-screen p-[clamp(24px,2vw,36px)] gap-[clamp(12px,2vw,24px)] md:bg-white md:opacity-[90%] md:border-gray-300 md:border justify-center md:w-[clamp(500px,3vw,900px)] md:h-[clamp(400px,2vh,800px)] md:rounded-[6px] font-primary"
+        className="flex flex-col w-screen h-screen p-[clamp(24px,2vw,36px)] gap-[clamp(12px,2vw,24px)] md:bg-white md:opacity-[90%] md:border-gray-300 md:border justify-center md:w-[clamp(500px,3vw,900px)] md:h-[clamp(430px,2vh,800px)] md:rounded-[6px] font-primary"
       >
-        <h1 className="font-bold font-primary text-[24px] text-blue">
-          Welcome Back
-        </h1>
+        <div>
+          <h1 className="font-bold font-primary text-[24px] text-blue">
+            Welcome Back
+          </h1>
+        </div>
+
         <div className="flex flex-col w-full gap-1">
-          <label htmlFor="email" className="font-primary font-light">
+          <label htmlFor="email" className="font-primary font-medium">
             Email
           </label>
           <input
@@ -67,13 +73,13 @@ export default function Login() {
             placeholder="mhawais@gmail.com"
           />
           {errors.email && (
-            <p className="text-red-800 font-primary font-light">
+            <p className="text-red-800 font-primary font-medium">
               {errors.email.message}
             </p>
           )}
         </div>
         <div className="flex flex-col w-full gap-1">
-          <label htmlFor="password" className="font-primary font-light">
+          <label htmlFor="password" className="font-primary font-medium">
             Password
           </label>
           <input
@@ -84,7 +90,7 @@ export default function Login() {
             placeholder="1233445"
           />
           {errors.password && (
-            <p className="text-red-800 font-primary font-light">
+            <p className="text-red-800 font-primary font-medium">
               {errors.password.message}
             </p>
           )}
@@ -98,6 +104,17 @@ export default function Login() {
         {error && (
           <p className="text-red-800 font-primary font-medium">{error}</p>
         )}
+        <div className="flex justify-center mt-4">
+          <p className="text-sm text-gray-600 font-primary font-medium">
+            Don't have an account?&nbsp;
+            <a
+              href="/register"
+              className="text-blue hover:underline font-medium font-primary"
+            >
+              Register here
+            </a>
+          </p>
+        </div>
       </form>
     </div>
   );
