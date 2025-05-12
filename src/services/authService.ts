@@ -13,9 +13,9 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
-import type { User } from "../components/login/Login";
 import { getErrorMessage } from "../lib/util";
 import type { FieldValues } from "react-hook-form";
+import type { User } from "../lib/types";
 
 type LoginSuccess = {
   success: true;

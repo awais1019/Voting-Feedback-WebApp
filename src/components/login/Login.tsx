@@ -13,11 +13,7 @@ const loginSchema = z.object({
 });
 
 export type FormData = z.infer<typeof loginSchema>;
-export type User = {
-  uid: string | null;
-  email: string | null;
-  role: string | null;
-};
+
 export default function Login() {
   const navigate = useNavigate();
 
@@ -28,11 +24,7 @@ export default function Login() {
     if (result.success) {
       const user = result.user;
       setAuthData(user);
-      if (user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/student-dashboard");
-      }
+      navigate("/dashboard");
     } else {
       setError(result.message);
     }

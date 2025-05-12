@@ -1,9 +1,7 @@
 export default function AdminDashboard() {
   return (
-    <div>
-      <p className="font-primary font-semibold text-black">
-        Welcome Admin
-      </p>
+    <div className="bg-yellow-50">
+     Home Pag
     </div>
   );
 }
