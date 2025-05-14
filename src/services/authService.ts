@@ -44,6 +44,7 @@ export const LoginUser = async (
     const userData = userDoc.data();
     const user: User = {
       uid,
+      name:userData.name,
       email: userData.email,
       role: userData.role,
     };

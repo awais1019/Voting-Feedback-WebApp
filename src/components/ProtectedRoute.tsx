@@ -7,8 +7,8 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { role } = useAuthStore();
-  if (!role || !allowedRoles.includes(role)) {
+  const { user } = useAuthStore();
+  if (!user?.role || !allowedRoles.includes(user?.role)) {
     return <Navigate to="/" replace />;
   }
 

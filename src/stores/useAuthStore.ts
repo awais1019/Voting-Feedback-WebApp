@@ -1,22 +1,19 @@
 import { create } from "zustand";
-import type { User } from "../components/login/Login";
+import type { User } from "../lib/types";
+
 
 
 
 type authState = {
-  uid: string | null;
-  role: string | null;
-  email: string | null;
+  user:User | null;
   setAuthData: (user: User) => void;
   clearAuthData: () => void;
 };
 
 export const useAuthStore = create<authState>((set) => ({
-  uid: null,
-  role: null,
-  email: null,
+  user:null,
   setAuthData: (user: User) => {
-    set({ uid: user.email, email: user.email, role: user.role });
+    set({ user:user });
   },
-  clearAuthData: () => set({ uid: null, role: null, email: null }),
+  clearAuthData: () => set({ user:null }),
 }));
